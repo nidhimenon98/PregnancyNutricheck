@@ -1,128 +1,168 @@
 package com.example.pregnancynutricheck;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.drawable.ColorDrawable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.app.DatePickerDialog;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.example.pregnancynutricheck.events.dbhelper;
 import static com.example.pregnancynutricheck.events.database;
-import static com.example.pregnancynutricheck.keys.PHONE_NO;
-import static com.example.pregnancynutricheck.keys.TABLE_NAME;
-
-import static android.graphics.Color.TRANSPARENT;
-
+import static com.example.pregnancynutricheck.events.dbhelper1;
+import static com.example.pregnancynutricheck.keys.Col_PHONE;
+import static com.example.pregnancynutricheck.keys.TBL_NAME;
 
 public class Signup_Form extends AppCompatActivity {
 
-        private EditText Name,Husband_Name,Region,Phone_no,pass,retype_pass;
-        private Button register;
-        //private static String URL_REGIST="http://192.168.1.101/android_register_login/register.php";
+    EditText edtName,edtphone,edtpass,edtstreet,edtcity,edtpin;
+    Button btnReg;
+
+    String name , city, pass, phone ,street,pin = "";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_signup__form);
+        edtName=findViewById(R.id.txtName);
+        edtphone=findViewById(R.id.txtPhone);
+        edtpass=findViewById(R.id.txtPass);
+        edtstreet=findViewById(R.id.txtstreet);
+        edtcity=findViewById(R.id.txtcity);
+        edtpin=findViewById(R.id.txtpin);
+        btnReg=findViewById(R.id.btn_submit);
+        btnReg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(),"Records successfully inserted",Toast.LENGTH_SHORT).show();
+
+                Intent i=new Intent(Signup_Form.this,login.class);
+                events.close();
+                finish();
 
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_signup__form);
-            Name=findViewById(R.id.txt1);
-            Husband_Name=findViewById(R.id.txt2);
-            Region=findViewById(R.id.txt3);
-            Phone_no=findViewById(R.id.txt4);
-            pass=findViewById(R.id.txt5);
-            retype_pass=findViewById(R.id.txt6);
-            register=findViewById(R.id.btn_submit);
-            register.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Register();
-                }
-            });
+            }
+        });
+
+
+
     }
-    private void Register(){
-            register.setVisibility(View.GONE);
-            final String name=this.Name.getText().toString().trim();
-            final String husband_name=this.Husband_Name.getText().toString().trim();
-            final String region=this.Region.getText().toString().trim();
-            final String phone_no=this.Phone_no.getText().toString().trim();
-            final String password=this.pass.getText().toString().trim();
-            final String retype_password=this.retype_pass.getText().toString().trim();
+    /*
 
-        StringRequest stringRequest=new StringRequest(Request.Method.POST, URL_REGIST, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try{
-                    JSONObject jsonObject=new JSONObject(response);
-                    String success=jsonObject.getString("success");
-                    if(success.equals("1")){
-                        Toast.makeText(Signup_Form.this,"Register successful",Toast.LENGTH_SHORT).show();
-                    }
-                }catch (JSONException e){
-                    e.printStackTrace();
-                    Toast.makeText(Signup_Form.this,"Register failed"+ e.toString(),Toast.LENGTH_SHORT).show();
-                    register.setVisibility(View.VISIBLE);
+    private void register() {
+        initialize();
+        if (!validate()){
+            Toast.makeText(getApplicationContext(), "Signup has failed", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            onSignupSuccess();
+        }
+    }
 
-                }
+    private boolean validate() {
+        boolean valid=true;
+        events.getInstance(getApplicationContext());
+        events.open();
 
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Signup_Form.this,"Register failed"+ error.toString(),Toast.LENGTH_SHORT).show();
-                        register.setVisibility(View.VISIBLE);
-
-                    }
-                })
-        {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params=new HashMap<>();
-                params.put("name",name);
-                params.put("husband_name",husband_name);
-                params.put("region",region);
-                params.put("phone_no",phone_no);
-                params.put("password",password);
+        if(name.isEmpty()||name.length()>32){
+            edtName.setError("Enter valid name");
+            valid=false;
+        }
 
 
-                return params;
-            }
+        else if ( (checkUser(phone))){
+            edtphone.setError("Email is already registered");
+            valid=false;
+
+        }
+        else if((phone.isEmpty())){
+            edtphone.setError("Not Valid Number");
+            valid=false;
+        }
+        else if ((phone.length()!=10 )){
+            edtphone.setError("Enter 10 digit Indian mobile number");
+            valid=false;
+
+        }
+        else if(!Pattern.matches("^[7-9][0-9]{9}$+",phone)){
+            edtphone.setError("Not an Indian Number");
+            valid=false;
+
+        }
+
+        else if(pass.isEmpty()){
+            edtpass.setError("Password should be of 8 characters ");
+            valid=false;
+        }
+
+
+        else if(city.isEmpty()||city.length()>10){
+            edtcity.setError("Enter a valid city ");
+            valid=false;
+        }
+        events.close();
+
+        return valid;
+
+
+    }
+
+    private void initialize() {
+
+        pin = edtpin.getText().toString().trim();
+        name = edtName.getText().toString().trim();
+        phone = edtphone.getText().toString().trim();
+        city = edtcity.getText().toString().trim();
+        pass = edtpass.getText().toString().trim();
+        street = edtstreet.getText().toString().trim();
+
+    }
+
+    private void onSignupSuccess() {
+
+
+        events.getInstance(getApplicationContext());
+        events.open();
+        events.add(name,phone,pass,street,city,pin);
+        Toast.makeText(getApplicationContext(),"Records successfully inserted",Toast.LENGTH_SHORT).show();
+
+        Intent i=new Intent(Signup_Form.this,login.class);
+        events.close();
+        finish();
+
+    }
+    private boolean checkUser(String phone) {
+        events.getInstance(getApplicationContext());
+        events.open();
+        String[] columns = {
+                Col_PHONE
         };
-        RequestQueue requestQueue= Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        database = dbhelper1.getReadableDatabase();
+        String selection = Col_PHONE + " = ?";
+        String[] selectionArgs = {phone};
+        Cursor cursor = database.query(TBL_NAME,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null);
+        int cursorCount = cursor.getCount();
+        cursor.close();
+        database.close();
 
+        if (cursorCount > 0) {
+            return true;
+        }
+        events.close();
 
+        return false;
     }
-
+*/
 }

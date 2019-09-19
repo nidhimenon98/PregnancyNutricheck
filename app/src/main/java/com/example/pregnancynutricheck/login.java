@@ -1,10 +1,9 @@
 package com.example.pregnancynutricheck;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,11 +15,10 @@ import android.widget.Toast;
 import static com.example.pregnancynutricheck.events.database;
 
 public class login extends AppCompatActivity {
-    TextView txt;
-    Button login;
-    EditText phone,edtpass;
-    CheckBox box;
-
+    TextView txtE,txtR;
+    Button btlogin;
+    EditText phone,edtPass;
+    CheckBox ckbox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,50 +27,59 @@ public class login extends AppCompatActivity {
         SharedPreferences sp;
         final SharedPreferences.Editor edit;
 
-        sp=getSharedPreferences("App name",MODE_PRIVATE);
-        edit=sp.edit();
+        sp = getSharedPreferences("App name", MODE_PRIVATE);
+        edit = sp.edit();
 
-        phone=findViewById(R.id.txtPhone);
-        edtpass=findViewById(R.id.txtPass);
+        txtR = findViewById(R.id.txtReg);
 
-        txt=findViewById(R.id.reg);
+        phone = findViewById(R.id.editphone);
+        edtPass = findViewById(R.id.txtPassword);
 
-        box=findViewById(R.id.checkbox1);
+        ckbox = findViewById(R.id.chkbox);
 
-        login=findViewById(R.id.btn_login);
+        btlogin = findViewById(R.id.btn_login);
 
-        login.setOnClickListener(new View.OnClickListener() {
+        btlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String phoneno=phone.getText().toString().trim();
-                String pass=edtpass.getText().toString().trim();
+                String phoneno = phone.getText().toString().trim();
+                String pass = edtPass.getText().toString().trim();
+                Toast.makeText(getApplicationContext(), "Records successfully inserted", Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(login.this, TabActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
+                /*
                 if (phoneno.equals("")||pass.equals(""))
                 {
                     Toast.makeText(getApplicationContext(),"Fill All The Fields",Toast.LENGTH_SHORT).show();
 
                     if(phoneno.equals(""))
                     {
-                        phone.setError("Enter phone number");
+                        phone.setError("enter phone number");
                     }
                     if(pass.equals(""))
                     {
-                        edtpass.setError("Password is Empty");
+                        edtPass.setError("pass is Empty");
                     }
                 }
                 else
                 {
                     events.getInstance(getApplicationContext());
                     events.open();
-                    Cursor cursor=database.rawQuery("SELECT * FROM " + keys.TABLE_NAME + " WHERE " + keys.PHONE_NO + "=? AND " + keys.PASS + "=?", new String[]{phoneno, pass});
+                    Cursor cursor=database.rawQuery("SELECT * FROM " + keys.TBL_NAME + " WHERE " + keys.Col_PHONE + "=? AND " + keys.Col_PASS + "=?", new String[]{phoneno, pass});
                     if (cursor!=null)
                     {
                         cursor.moveToLast();
                         if (cursor.getCount()>0)
                         {
-                            Toast.makeText(getApplicationContext(), "Successfully Logged", Toast.LENGTH_SHORT).show();
-                            Intent i=new Intent(login.this,MainActivity.class);
+                            Toast.makeText(getApplicationContext(), "Successfully LoggedIn", Toast.LENGTH_SHORT).show();
+                            Intent i=new Intent(login.this,TabActivity.class);
+                            startActivity(i);
 
-                            if (box.isChecked())
+                            if (ckbox.isChecked())
                             {
                                 edit.putString("phone",phoneno);
                                 edit.putString("pass",pass);
@@ -84,12 +91,11 @@ public class login extends AppCompatActivity {
                                 edit.remove("pass");
                                 edit.commit();
                             }
-                            startActivity(i);
                             finish();
                         }
                         else
                         {
-                            Toast.makeText(getApplicationContext(),"Invalid Login",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"Invalid Login Credentials",Toast.LENGTH_SHORT).show();
                             edit.remove("phone");
                             edit.remove("pass");
                             edit.commit();
@@ -103,34 +109,20 @@ public class login extends AppCompatActivity {
 
         });
 
+
         if (sp.contains("phone"));
         phone.setText(sp.getString("phone",""));
 
         if (sp.contains("pass"));
-        edtpass.setText(sp.getString("pass",""));
-
-        txt.setOnClickListener(new View.OnClickListener() {
+        edtPass.setText(sp.getString("pass",""));
+*/
+        txtR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent a=new Intent(login.this,nav_main.class);
+                Intent a = new Intent(login.this, Signup_Form.class);
                 startActivity(a);
             }
         });
-    }
-
-
-    /*
-    @Override
-
-    public void onBackPressed()
-    {
-        Intent i=new Intent(Intent.ACTION_MAIN);
-        i.addCategory(Intent.CATEGORY_HOME);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(i);
-    }
-*/
 
     }
-
-
+}

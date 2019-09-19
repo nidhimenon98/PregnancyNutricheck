@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="none">
-    <item android:id="@+id/home"
-        android:title="Home"/>
-    <item android:id="@+id/lang"
-        android:title="Choose Language"/>
-    <item android:id="@+id/rate"
-        android:onClick="rate_us"
-        android:title="Rate Us" />
-    <item android:id="@+id/mycar"
-        android:title="Contact Us"/>
-    <item android:id="@+id/mycat"
-        android:title="About Us"/>
-    <item android:id="@+id/myart"
-        android:title="Logout" />
+        <item android:id="@+id/home"
+            android:title="Home"/>
+        <item android:id="@+id/lang"
+            android:title="Choose Language"/>
+        <item android:id="@+id/rate"
+            android:onClick="rate_us"
+            android:title="Rate Us" />
+        <item android:id="@+id/mycar"
+            android:title="Contact Us"/>
+        <item android:id="@+id/mycat"
+            android:title="About Us"/>
+        <item android:id="@+id/myart"
+            android:title="Logout" />
     </group>
 </menu>

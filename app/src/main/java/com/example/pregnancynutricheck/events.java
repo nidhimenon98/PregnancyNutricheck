@@ -7,30 +7,35 @@ import android.util.Log;
 
 public class events {
     static SQLiteDatabase database;
-    public static DatabaseHelper dbhelper;
-    public static DatabaseHelper getInstance(Context context)
+    public static dbhelper dbhelper1;
+    public static dbhelper getInstance(Context context)
     {
-        if(dbhelper==null){
-            dbhelper=new DatabaseHelper(context);
+        if (dbhelper1==null) {
+            dbhelper1=new dbhelper(context);
         }
-        return dbhelper;
+        return dbhelper1;
     }
+    public static void open()
+    {
+        database=dbhelper1.getWritableDatabase();
+    }
+    public static void close()
+    {
 
-    public static void open(){database=dbhelper.getWritableDatabase();}
-    public static void close(){
         database.close();
     }
-    public static void add(String name, String husband_name, String region, String phone_no, String pass, String re_pass){
-        ContentValues c=new ContentValues();
-        c.put(keys.NAME,name);
-        c.put(keys.HUSBAND_NAME, husband_name);
-        c.put(keys.REGION, region);
-        c.put(keys.PASS, phone_no);
-        c.put(keys.PHONE_NO, pass);
-        c.put(keys.RE_TYPE_PASS,re_pass);
+    public static void add(String name, String phone, String pass, String street,String city,String pin)
+    {
+        ContentValues cv=new ContentValues();
+        cv.put(keys.Col_NAME,name);
+        cv.put(keys.Col_PHONE, phone);
+        cv.put(keys.Col_PASS, pass);
+        cv.put(keys.Col_STREET, street);
+        cv.put(keys.Col_CITY,city);
+        cv.put(keys.Col_PIN,pin);
 
-        database.insertOrThrow(keys.TABLE_NAME,null,c);
+        database.insertOrThrow(keys.TBL_NAME,null,cv);
         Log.i("preg","Record Inserted Successfully");
-
     }
+
 }

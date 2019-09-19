@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:gravity="bottom"
     android:padding="16dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:theme="@style/Theme.Design.Light.NoActionBar"
     android:background="@color/colorBackground">
 
     <ImageView
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
-        android:text="Nidhi THE GREAT"
+        android:text="Nidhi"
         android:textSize="22sp"
         android:textColor="@color/colorPrimary"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"

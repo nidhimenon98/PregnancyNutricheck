@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.pregnancynutricheck">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-sdk
+        tools:overrideLibrary="com.thoughtbot.expandablerecyclerview"/>
 
     <application
         android:allowBackup="true"
@@ -10,13 +13,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".TabActivity"
-            android:label="@string/title_activity_tab"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".RecyclerViewMain"></activity>
         <activity android:name=".nav_main" />
+        <activity android:name=".TabActivity" />
         <activity android:name=".Signup_Form" />
         <activity android:name=".rating" />
         <activity android:name=".choose_language" />

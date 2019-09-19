@@ -12,6 +12,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         new Handler().postDelayed(new Runnable() {
 
 // Using handler with postDelayed called runnable run method
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
             public void run() {
 
-                Intent i = new Intent(MainActivity.this, Signup_Form.class);
+                Intent i = new Intent(MainActivity.this, login.class);
 
                 startActivity(i);
 
